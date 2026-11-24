@@ -1,51 +1,56 @@
 <!DOCTYPE html>
 <!--
-  FLEET TRACKER - personal iPhone launcher (one copy per person, each with its own icon)
-
-  SETUP
-  1) Make one folder per person on your website, for example (GoDaddy File Manager):
-        finalpartssource.com/fleet/juan/
-        finalpartssource.com/fleet/dad/
-        finalpartssource.com/fleet/uncle/
-  2) In each folder put:
-        index.html            = this file, with USER and PIN below set for that person (same as the Users tab)
-        apple-touch-icon.png  = that person's icon (rename their icon file to exactly this)
-  3) Paste the web app URL (Deploy > Manage deployments) into APP_URL below.
-  4) Each person opens THEIR folder link in Safari > Share > Add to Home Screen.
-     They get their own icon, and the app opens with their name already picked (PIN only).
+  FLEET TRACKER - personal iPhone launcher for Brian
+  This page only holds Brian's icon and opens the Google app directly.
+  Upload this as index.html next to apple-touch-icon.png in the "brian" folder on GitHub.
+  If you change Brian's PIN in the Users tab, change PIN below to match.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Fleet Tracker</title>
+<title>Brian's Garage</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Fleet">
+<meta name="apple-mobile-web-app-title" content="Brian's Garage">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0b0e">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="apple-touch-icon.png">
 <style>
-  html,body{margin:0;height:100%;background:#0a0b0e}
-  iframe{position:fixed;inset:0;width:100%;height:100%;border:0;padding-top:env(safe-area-inset-top);box-sizing:border-box;background:#0a0b0e}
+  html,body{margin:0;min-height:100%;background:#0a0b0e;color:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  .wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;box-sizing:border-box;text-align:center}
+  img{width:128px;height:128px;border-radius:28px}
+  h1{margin:0;font-size:26px;letter-spacing:.5px;text-transform:uppercase}
+  a.btn{background:#e8641e;color:#ffffff;text-decoration:none;font-weight:600;padding:15px 30px;border-radius:14px;font-size:17px}
+  .tip{color:#8b93a1;font-size:14px;line-height:1.5;max-width:300px}
+  .tip b{color:#f3f4f6}
 </style>
 </head>
 <body>
+<div class="wrap">
+  <img src="apple-touch-icon.png" alt="">
+  <h1>Brian's Garage</h1>
+  <a class="btn" id="open" href="#">Open</a>
+  <div class="tip" id="tip">On iPhone, put this on your home screen: tap <b>Share</b>, then <b>Add to Home Screen</b>.</div>
+</div>
 <script>
   const APP_URL = 'https://script.google.com/macros/s/AKfycbxCQNbuCmSMeY3XjdplKiUq-55tnqVcYvk_oWAGjIk0_MgGPwHF8vtzV279WDRvjXFNAQ/exec';
-  const USER    = 'Brian';     // must match the Users tab
-  const PIN     = '2222';      // this person's PIN from the Users tab - opens with no PIN prompt
+  const USER    = 'Brian';   // must match the Users tab
+  const PIN     = '2222';    // this person's PIN from the Users tab - opens with no PIN prompt
 
   const here = new URLSearchParams(location.search);
   const q = new URLSearchParams();
   q.set('user', USER);
   if (PIN) q.set('key', PIN);
   if (here.get('car')) q.set('car', here.get('car'));
-  const f = document.createElement('iframe');
-  f.src = APP_URL + (APP_URL.indexOf('?') > -1 ? '&' : '?') + q.toString();
-  f.allow = 'clipboard-write; web-share';
-  document.body.appendChild(f);
+  const target = APP_URL + (APP_URL.indexOf('?') > -1 ? '&' : '?') + q.toString();
+  document.getElementById('open').href = target;
+
+  // Opened from the home screen icon: go straight into the app.
+  // Opened in a normal browser tab: stay here so you can tap Add to Home Screen (or tap Open).
+  const fromHomeScreen = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
+  if (fromHomeScreen || here.get('go') === '1') location.replace(target);
 </script>
 </body>
 </html>
