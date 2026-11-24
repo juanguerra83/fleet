@@ -8,7 +8,7 @@
         finalpartssource.com/fleet/dad/
         finalpartssource.com/fleet/uncle/
   2) In each folder put:
-        index.html            = this file, with USER below set to that person's name (same as the Users tab)
+        index.html            = this file, with USER and PIN below set for that person (same as the Users tab)
         apple-touch-icon.png  = that person's icon (rename their icon file to exactly this)
   3) Paste the web app URL (Deploy > Manage deployments) into APP_URL below.
   4) Each person opens THEIR folder link in Safari > Share > Add to Home Screen.
@@ -35,10 +35,12 @@
 <script>
   const APP_URL = 'https://script.google.com/macros/s/AKfycbxCQNbuCmSMeY3XjdplKiUq-55tnqVcYvk_oWAGjIk0_MgGPwHF8vtzV279WDRvjXFNAQ/exec';
   const USER    = 'Brian';     // must match the Users tab
+  const PIN     = '2222';      // this person's PIN from the Users tab - opens with no PIN prompt
 
   const here = new URLSearchParams(location.search);
   const q = new URLSearchParams();
   q.set('user', USER);
+  if (PIN) q.set('key', PIN);
   if (here.get('car')) q.set('car', here.get('car'));
   const f = document.createElement('iframe');
   f.src = APP_URL + (APP_URL.indexOf('?') > -1 ? '&' : '?') + q.toString();
