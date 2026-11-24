@@ -49,27 +49,23 @@
   const target = APP_URL + (APP_URL.indexOf('?') > -1 ? '&' : '?') + q.toString();
   document.getElementById('open').href = target;
 
-  // Opened from the home screen icon: run the app inside this page (no Safari bars).
-  // If the app doesn't report back in 8 seconds (some phones block it), open Google's page directly instead.
-  // Opened in a normal browser tab: stay here so you can tap Add to Home Screen (or tap Open).
-  const fromHomeScreen = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
-  if (fromHomeScreen || here.get('go') === '1') {
-    document.getElementById('wrap').remove();
-    const cover = document.createElement('div');
-    cover.className = 'loading';
-    cover.innerHTML = '<img src="apple-touch-icon.png" alt="" onerror="this.remove()">';
-    document.body.appendChild(cover);
-    const f = document.createElement('iframe');
-    f.src = target;
-    f.allow = 'clipboard-write; web-share';
-    document.body.appendChild(f);
-    let ok = false;
-    window.addEventListener('message', e => {
-      if (e.data && e.data.fleet === 'ready') { ok = true; cover.remove(); }
-    });
-    setTimeout(() => { if (!ok) location.replace(target); }, 8000);
-  }
-  else document.getElementById('wrap').style.visibility = 'visible';
+  // Always run the app inside this page. The address stays on this page, so the iPhone's
+  // Add to Home Screen keeps this person's icon, and the home screen app opens with no Safari bars.
+  // If the app doesn't report back within 8 seconds (some browsers block it), open Google's page directly instead.
+  document.getElementById('wrap').remove();
+  const cover = document.createElement('div');
+  cover.className = 'loading';
+  cover.innerHTML = '<img src="apple-touch-icon.png" alt="" onerror="this.remove()">';
+  document.body.appendChild(cover);
+  const f = document.createElement('iframe');
+  f.src = target;
+  f.allow = 'clipboard-write; web-share';
+  document.body.appendChild(f);
+  let ok = false;
+  window.addEventListener('message', e => {
+    if (e.data && e.data.fleet === 'ready') { ok = true; cover.remove(); }
+  });
+  setTimeout(() => { if (!ok) location.replace(target); }, 8000);
 </script>
 </body>
 </html>
