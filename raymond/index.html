@@ -3,7 +3,6 @@
   FLEET TRACKER - personal iPhone launcher for Raymond
   This page only holds Raymond's icon and opens the Google app directly.
   Upload this as index.html next to apple-touch-icon.png in the "raymond" folder on GitHub.
-  If you change Raymond's PIN in the Users tab, change PIN below to match.
 -->
 <html lang="en">
 <head>
@@ -28,8 +27,8 @@
 </style>
 </head>
 <body>
-<div class="wrap">
-  <img src="apple-touch-icon.png" alt="">
+<div class="wrap" id="wrap" style="visibility:hidden">
+  <img src="apple-touch-icon.png" alt="" onerror="this.style.display='none'">
   <h1>Raymond's Garage</h1>
   <a class="btn" id="open" href="#">Open</a>
   <div class="tip" id="tip">On iPhone, put this on your home screen: tap <b>Share</b>, then <b>Add to Home Screen</b>.</div>
@@ -37,7 +36,7 @@
 <script>
   const APP_URL = 'https://script.google.com/macros/s/AKfycbxCQNbuCmSMeY3XjdplKiUq-55tnqVcYvk_oWAGjIk0_MgGPwHF8vtzV279WDRvjXFNAQ/exec';
   const USER    = 'Raymond';   // must match the Users tab
-  const PIN     = '4444';    // this person's PIN from the Users tab - opens with no PIN prompt
+  const PIN     = '';      // leave blank if this person has no PIN in the Users tab
 
   const here = new URLSearchParams(location.search);
   const q = new URLSearchParams();
@@ -51,6 +50,7 @@
   // Opened in a normal browser tab: stay here so you can tap Add to Home Screen (or tap Open).
   const fromHomeScreen = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
   if (fromHomeScreen || here.get('go') === '1') location.replace(target);
+  else document.getElementById('wrap').style.visibility = 'visible';
 </script>
 </body>
 </html>
